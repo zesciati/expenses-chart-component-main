@@ -14,7 +14,7 @@
 
     <section class="w-full p-5 rounded-md bg-white space-y-7 sm:w-120 max-w-120">
       <h2 class="text-2xl font-semibold">Spending - Last 7 days</h2>
-      <article class="flex gap-2 flex-wrap pt-10 sm:gap-4 mx-auto">
+      <article class="flex gap-2 flex-wrap pt-10 sm:gap-4 mx-0.5 sm:mx-1">
         <div class="space-y-2">
           <div class="bg-red-500 h-30 w-10 rounded-sm sm:w-12"></div>
           <p class="text-center text-brown-400">mon</p>
