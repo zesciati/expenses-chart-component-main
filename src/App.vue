@@ -1,10 +1,23 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import datas from "../data.json";
+import { computed } from "vue";
+
+interface SpendingItem {
+  day: string;
+  amount: number;
+}
+const data: SpendingItem[] = datas;
+
+const maxAmount = computed(() => Math.max(...data.map((d) => d.amount)));
+</script>
 
 <template>
   <main
-    class="flex justify-center items-center h-screen flex-col bg-red-100 px-5 space-y-4 "
+    class="flex justify-center items-center h-screen flex-col bg-red-100 px-5 space-y-4"
   >
-    <section class="flex justify-between bg-red-500 w-full p-5 rounded-md sm:w-120 sm:max-w-120">
+    <section
+      class="flex justify-between bg-red-500 w-full p-5 rounded-md sm:w-120 sm:max-w-120"
+    >
       <div class="text-white">
         <p class="text-lg">My balance</p>
         <p class="text-3xl font-bold">$921.48</p>
@@ -12,43 +25,33 @@
       <img src="/images/logo.svg" alt="" />
     </section>
 
-    <section class="w-full p-5 rounded-md bg-white space-y-7 sm:w-120 max-w-120">
+    <section
+      class="w-full p-5 rounded-md bg-white space-y-7 sm:w-120 max-w-120"
+    >
       <h2 class="text-2xl font-semibold">Spending - Last 7 days</h2>
-      <article class="flex gap-2 flex-wrap pt-10 sm:gap-4 mx-0.5 sm:mx-1">
-        <div class="space-y-2">
-          <div class="bg-red-500 h-30 w-10 rounded-sm sm:w-12"></div>
-          <p class="text-center text-brown-400">mon</p>
+      <!-- <article class="flex gap-2 flex-wrap pt-10 sm:gap-4 mx-0.5 sm:mx-1" >
+        <div class="space-y-2" v-for="item in data" :key="item.day">
+          <div class="bg-red-500 h-30 w-10 rounded-sm sm:w-12 2xs:w-8" :style="{height: item.amount + 'px'}"></div>
+          <p class="text-center text-brown-400">{{ item.day }}</p>
         </div>
+      </article> -->
 
-        <div class="space-y-2">
-          <div class="bg-red-500 h-30 w-10 rounded-sm sm:w-12"></div>
-          <p class="text-center text-brown-400">tue</p>
-        </div>
-        <div class="space-y-2">
-          <div class="bg-red-500 h-30 w-10 rounded-sm sm:w-12"></div>
-          <p class="text-center text-brown-400">wed</p>
-        </div>
-        <div class="space-y-2">
-          <div class="bg-red-500 h-30 w-10 rounded-sm sm:w-12"></div>
-          <p class="text-center text-brown-400 ">thu</p>
-        </div>
-
-        <div class="space-y-2">
-          <div class="bg-red-500 h-30 w-10 rounded-sm sm:w-12"></div>
-          <p class="text-center text-brown-400">fri</p>
-        </div>
-
-        <div class="space-y-2">
-          <div class="bg-red-500 h-30 w-10 rounded-sm sm:w-12"></div>
-          <p class="text-center text-brown-400">sat</p>
-        </div>
-
-        <div class="space-y-2">
-          <div class="bg-red-500 h-30 w-10 rounded-sm sm:w-12"></div>
-          <p class="text-center text-brown-400">sun</p>
+      <article class="flex items-end justify-between gap-2 h-60 pt-10 sm:gap-3">
+        <div
+          class="flex flex-col items-center flex-1 h-full justify-end space-y-2"
+          v-for="item in data"
+          :key="item.day"
+        >
+          <div
+            class="w-full rounded-sm hover:opacity-75 transition-opacity"
+            :class="item.amount === maxAmount ? 'bg-cyan-400' : 'bg-red-500'"
+            :style="{ height: (item.amount / maxAmount) * 100 + '%' }"
+          ></div>
+          <p class="text-center text-brown-400 text-sm capitalize">
+            {{ item.day }}
+          </p>
         </div>
       </article>
-
       <div class="border border-red-100"></div>
 
       <article class="flex justify-between items-center">
@@ -67,4 +70,3 @@
 </template>
 
 <style scoped></style>
-
