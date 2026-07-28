@@ -9,6 +9,7 @@ interface SpendingItem {
 const data: SpendingItem[] = datas;
 
 const maxAmount = computed(() => Math.max(...data.map((d) => d.amount)));
+const totalAmount  = computed(() => data.reduce((sum,item) => sum + item.amount, 0))
 </script>
 
 <template>
@@ -57,7 +58,7 @@ const maxAmount = computed(() => Math.max(...data.map((d) => d.amount)));
       <article class="flex justify-between items-center">
         <div>
           <p class="text-lg text-brown-400">Total this month</p>
-          <h2 class="text-4xl font-semibold">$478.33</h2>
+          <h2 class="text-4xl font-semibold">{{ totalAmount.toFixed(2) }}</h2>
         </div>
 
         <div class="text-right">
