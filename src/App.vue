@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import datas from "../data.json";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 
 interface SpendingItem {
   day: string;
@@ -9,9 +9,20 @@ interface SpendingItem {
 const data: SpendingItem[] = datas;
 
 const isHoveredShowIndex = ref<number | null>(null);
+const isLoaded = ref(false);
 
 const maxAmount = computed(() => Math.max(...data.map((d) => d.amount)));
 // const totalAmount  = computed(() => data.reduce((sum,item) => sum + item.amount, 0))
+
+onMounted(() => {
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        isLoaded.value = true;
+      });
+    });
+  });
+});
 </script>
 
 <template>
@@ -48,9 +59,12 @@ const maxAmount = computed(() => Math.max(...data.map((d) => d.amount)));
           <div
             @mouseenter="isHoveredShowIndex = index"
             @mouseleave="isHoveredShowIndex = null"
-            class="w-full rounded-sm hover:opacity-75 transition-opacity relative"
+            class="w-full rounded-sm hover:opacity-75 relative transition-[height,opacity] duration-500 ease-out"
             :class="item.amount === maxAmount ? 'bg-cyan-400' : 'bg-red-500'"
-            :style="{ height: (item.amount / maxAmount) * 100 + '%' }"
+            :style="{
+              height: isLoaded ? (item.amount / maxAmount) * 100 + '%' : '0%',
+              transitionDelay: `${index * 150}ms`,
+            }"
           >
             <label
               for=""
