@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import datas from "../data.json";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 
 interface SpendingItem {
   day: string;
@@ -8,8 +8,10 @@ interface SpendingItem {
 }
 const data: SpendingItem[] = datas;
 
+const isHoveredShowIndex = ref<number | null>(null);
+
 const maxAmount = computed(() => Math.max(...data.map((d) => d.amount)));
-const totalAmount  = computed(() => data.reduce((sum,item) => sum + item.amount, 0))
+// const totalAmount  = computed(() => data.reduce((sum,item) => sum + item.amount, 0))
 </script>
 
 <template>
@@ -37,17 +39,26 @@ const totalAmount  = computed(() => data.reduce((sum,item) => sum + item.amount,
         </div>
       </article> -->
 
-      <article class="flex items-end justify-between gap-2 h-60 pt-10 sm:gap-3">
+      <article class="flex items-end justify-between gap-1 h-70 pt-10 sm:gap-3">
         <div
           class="flex flex-col items-center flex-1 h-full justify-end space-y-2"
-          v-for="item in data"
+          v-for="(item, index) in data"
           :key="item.day"
         >
           <div
-            class="w-full rounded-sm hover:opacity-75 transition-opacity"
+            @mouseenter="isHoveredShowIndex = index"
+            @mouseleave="isHoveredShowIndex = null"
+            class="w-full rounded-sm hover:opacity-75 transition-opacity relative"
             :class="item.amount === maxAmount ? 'bg-cyan-400' : 'bg-red-500'"
             :style="{ height: (item.amount / maxAmount) * 100 + '%' }"
-          ></div>
+          >
+            <label
+              for=""
+              class="bg-brown-950 text-red-100 p-0.5 rounded-md text-xs sm:text-base absolute -top-10"
+              v-if="isHoveredShowIndex === index"
+              >${{ item.amount }}</label
+            >
+          </div>
           <p class="text-center text-brown-400 text-sm capitalize">
             {{ item.day }}
           </p>
@@ -58,7 +69,7 @@ const totalAmount  = computed(() => data.reduce((sum,item) => sum + item.amount,
       <article class="flex justify-between items-center">
         <div>
           <p class="text-lg text-brown-400">Total this month</p>
-          <h2 class="text-4xl font-semibold">{{ totalAmount.toFixed(2) }}</h2>
+          <h2 class="text-4xl font-semibold">$478.33</h2>
         </div>
 
         <div class="text-right">
